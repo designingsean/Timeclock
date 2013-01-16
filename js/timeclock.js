@@ -58,7 +58,7 @@ var timeclock = (function() {
 					timeSpan = (timeSpan/3600000).round(2);
 				}
 
-				timeclock.$history.find('tbody').append('<tr><td>' + Date.create(row.clockIn).format('{Dow}, {Mon} {d}') + '</td><td>' + Date.create(row.clockIn).format('{12hr}:{mm} {tt}') + '</td><td>' + clockOut + '</td><td>' + timeSpan + ' ' + Date.create('2012-12-30').getISOWeek() + '</td></tr>');
+				timeclock.$history.find('tbody').append('<tr><td>' + Date.create(row.clockIn).format('{Dow}, {Mon} {d}') + '</td><td>' + Date.create(row.clockIn).format('{12hr}:{mm} {tt}') + '</td><td>' + clockOut + '</td><td>' + timeSpan + '</td></tr>');
 			});
 		});
 	}
