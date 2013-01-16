@@ -8,8 +8,20 @@
 	<button id="clockIn" disabled>Clock In</button><button id="clockOut" disabled>Clock Out</button></p>
 	<h2>Last Action</h2>
 	<p id="current-status"></p>
-	<h2>History</h2>
-	<table id="history" width="400">
+	<h2>Current Pay Period</h2>
+	<table id="current-period" width="400">
+		<thead>
+			<tr>
+				<th width="25%">Date</th>
+				<th width="25%">In</th>
+				<th width="25%">Out</th>
+				<th width="25%">Total</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+	<h2>Previous Pay Period</h2>
+	<table id="previous-period" width="400">
 		<thead>
 			<tr>
 				<th width="25%">Date</th>
