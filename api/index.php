@@ -28,7 +28,7 @@ switch ($action) {
 			$startDate = date('y-m-d', strtotime('last Monday -1 week'));
 			$endDate = date('y-m-d', strtotime('next Monday'));
 		}
-		$results = DB::query('SELECT clockIn, clockOut FROM clock WHERE uid=%s AND (clockIn >= %s AND clockIn < %s)', $user, $startDate, $endDate);
+		$results = DB::query('SELECT clockIn, clockOut FROM clock WHERE uid=%s AND (clockIn >= %s AND clockIn < %s) ORDER BY clockIn DESC', $user, $startDate, $endDate);
 		echo json_encode($results);
 		break;
 	case 'getPrevious' :
@@ -39,7 +39,7 @@ switch ($action) {
 			$startDate = date('y-m-d', strtotime('last Monday -3 week'));
 			$endDate = date('y-m-d', strtotime('last Monday -1 week'));
 		}
-		$results = DB::query('SELECT clockIn, clockOut FROM clock WHERE uid=%s AND (clockIn >= %s AND clockIn < %s)', $user, $startDate, $endDate);
+		$results = DB::query('SELECT clockIn, clockOut FROM clock WHERE uid=%s AND (clockIn >= %s AND clockIn < %s) ORDER BY clockIn DESC', $user, $startDate, $endDate);
 		echo json_encode($results);
 		break;
 	case 'clockIn' :
