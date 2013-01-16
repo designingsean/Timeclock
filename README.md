@@ -7,13 +7,16 @@ Required Libraries
 ==================
 
 jQuery 1.8.3
+
 Sugar JS 1.3.8
+
 Meekro 2.1
 
 Database Structure
 ==================
 
 Database name: timeclock
+
 User table:
 CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
