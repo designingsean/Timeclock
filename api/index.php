@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/New_York');
 require_once 'meekrodb.2.1.class.php';
 require_once 'db.config.php';
 
