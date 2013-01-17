@@ -50,25 +50,17 @@ var timeclock = (function() {
 	};
 
 	function getCurrent() {
-		$.getJSON('api/?action=getCurrent&user=' + my.currentUser, function(clock) {
-			timeclock.$currentPeriod.find('tbody').empty();
-			$.each(clock, function(key, row) {
-				var clockOut = '';
-				var timeSpan = '';
-				if (row.clockOut !== null) {
-					clockOut = Date.create(row.clockOut).format('{12hr}:{mm} {tt}');
-					timeSpan = Date.range(row.clockIn, row.clockOut).duration();
-					timeSpan = (timeSpan/3600000).round(2);
-				}
-
-				timeclock.$currentPeriod.find('tbody').append('<tr><td>' + Date.create(row.clockIn).format('{Dow}, {Mon} {d}') + '</td><td>' + Date.create(row.clockIn).format('{12hr}:{mm} {tt}') + '</td><td>' + clockOut + '</td><td>' + timeSpan + '</td></tr>');
-			});
-		});
+		buildTable('api/?action=getCurrent&user=' + my.currentUser, timeclock.$currentPeriod);
 	}
 
 	function getPrevious() {
-		$.getJSON('api/?action=getPrevious&user=' + my.currentUser, function(clock) {
-			timeclock.$previousPeriod.find('tbody').empty();
+		buildTable('api/?action=getPrevious&user=' + my.currentUser, timeclock.$previousPeriod);
+	}
+
+	function buildTable(api, $table) {
+		$.getJSON(api, function(clock) {
+			$table.find('tbody').empty();
+			var totalTime = 0;
 			$.each(clock, function(key, row) {
 				var clockOut = '';
 				var timeSpan = '';
@@ -76,9 +68,10 @@ var timeclock = (function() {
 					clockOut = Date.create(row.clockOut).format('{12hr}:{mm} {tt}');
 					timeSpan = Date.range(row.clockIn, row.clockOut).duration();
 					timeSpan = (timeSpan/3600000).round(2);
+					totalTime += timeSpan;
 				}
 
-				timeclock.$previousPeriod.find('tbody').append('<tr><td>' + Date.create(row.clockIn).format('{Dow}, {Mon} {d}') + '</td><td>' + Date.create(row.clockIn).format('{12hr}:{mm} {tt}') + '</td><td>' + clockOut + '</td><td>' + timeSpan + '</td></tr>');
+				$table.find('tbody').append('<tr><td>' + Date.create(row.clockIn).format('{Dow}, {Mon} {d}') + '</td><td>' + Date.create(row.clockIn).format('{12hr}:{mm} {tt}') + '</td><td>' + clockOut + '</td><td>' + timeSpan + '</td></tr>');
 			});
 		});
 	}
