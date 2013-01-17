@@ -28,7 +28,8 @@ var timeclock = (function() {
 					my.$clockInBtn.attr('disabled', 'disabled');
 					updateStatus("Clocked in", clock.clockIn);
 				}
-				my.getHistory();
+				getCurrent();
+				getPrevious();
 			});
 		} else {
 			my.$clockInBtn.attr('disabled', 'disabled');
@@ -48,12 +49,7 @@ var timeclock = (function() {
 		.complete(function() { my.getStatus(); });
 	};
 
-	my.getHistory = function() {
-		my.getCurrent();
-		my.getPrevious();
-	}
-
-	my.getCurrent = function() {
+	function getCurrent() {
 		$.getJSON('api/?action=getCurrent&user=' + my.currentUser, function(clock) {
 			timeclock.$currentPeriod.find('tbody').empty();
 			$.each(clock, function(key, row) {
@@ -70,7 +66,7 @@ var timeclock = (function() {
 		});
 	}
 
-	my.getPrevious = function() {
+	function getPrevious() {
 		$.getJSON('api/?action=getPrevious&user=' + my.currentUser, function(clock) {
 			timeclock.$previousPeriod.find('tbody').empty();
 			$.each(clock, function(key, row) {
