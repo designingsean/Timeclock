@@ -4,39 +4,42 @@
 	<meta charset="utf-8">
 	<title>The Little Gym of West Ashley</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/timeclock.css" rel="stylesheet">
 </head>
 <body>
-	<h1>TLG West Ashley</h1>
-	<p class="form-inline"><select><option value="0">Who are you?</option></select> <button class="close" style="float:none;">&times;</button></p>
-	<p class="lead" id="current-status"></p>
-	<p class="form-inline"><button class="btn" id="clockIn" disabled>Clock In</button> <button class="btn" id="clockOut" disabled>Clock Out</button></p>
-	<p class="lead" id="current-status"></p>
-	<h2>Current Pay Period</h2>
-	<p class="lead"></p>
-	<table class="table table-striped" id="current-period" width="400">
-		<thead>
-			<tr>
-				<th width="25%">Date</th>
-				<th width="25%">In</th>
-				<th width="25%">Out</th>
-				<th width="25%">Total</th>
-			</tr>
-		</thead>
-		<tbody></tbody>
-	</table>
-	<h2>Previous Pay Period</h2>
-	<p class="lead"></p>
-	<table class="table table-striped" id="previous-period" width="400">
-		<thead>
-			<tr>
-				<th width="25%">Date</th>
-				<th width="25%">In</th>
-				<th width="25%">Out</th>
-				<th width="25%">Total</th>
-			</tr>
-		</thead>
-		<tbody></tbody>
-	</table>
+	<div class="contain">
+		<h1>TLG West Ashley</h1>
+		<p class="form-inline"><select><option value="0">Who are you?</option></select> <button class="close" style="float:none;">&times;</button></p>
+		<p class="lead" id="current-status"></p>
+		<p class="form-inline"><button class="btn" id="clockIn" disabled>Clock In</button> <button class="btn" id="clockOut" disabled>Clock Out</button></p>
+		<p class="lead" id="current-status"></p>
+		<h2>Current Pay Period</h2>
+		<p class="lead"></p>
+		<table class="table table-striped" id="current-period" width="400">
+			<thead>
+				<tr>
+					<th width="25%">Date</th>
+					<th width="25%">In</th>
+					<th width="25%">Out</th>
+					<th width="25%">Total</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<h2>Previous Pay Period</h2>
+		<p class="lead"></p>
+		<table class="table table-striped" id="previous-period" width="400">
+			<thead>
+				<tr>
+					<th width="25%">Date</th>
+					<th width="25%">In</th>
+					<th width="25%">Out</th>
+					<th width="25%">Total</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
 <script src="js/jquery.min.js"></script>
 <script src="js/sugar.min.js"></script>
 <script src="js/timeclock.js"></script>
