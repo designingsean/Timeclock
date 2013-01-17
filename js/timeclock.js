@@ -73,6 +73,7 @@ var timeclock = (function() {
 
 				$table.find('tbody').append('<tr><td>' + Date.create(row.clockIn).format('{Dow}, {Mon} {d}') + '</td><td>' + Date.create(row.clockIn).format('{12hr}:{mm} {tt}') + '</td><td>' + clockOut + '</td><td>' + timeSpan + '</td></tr>');
 			});
+			$table.prev('p').empty().append(totalTime + ' total hours');
 		});
 	}
 
