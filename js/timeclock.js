@@ -4,7 +4,7 @@ var timeclock = (function() {
 	my.$select = null;
 	my.$clockInBtn = null;
 	my.$clockOutBtn = null;
-	my.$history = null;
+	my.$currentStatus = null;
 	my.$currentPeriod = null;
 	my.$previousPeriod = null;
 
@@ -32,9 +32,18 @@ var timeclock = (function() {
 				getPrevious();
 			});
 		} else {
-			my.$clockInBtn.attr('disabled', 'disabled');
-			my.$clockOutBtn.attr('disabled', 'disabled');
+			my.reset();
 		}
+	};
+
+	my.reset = function() {
+		my.$clockInBtn.attr('disabled', 'disabled').removeClass('btn-primary');
+		my.$clockOutBtn.attr('disabled', 'disabled').removeClass('btn-primary');
+		my.$currentStatus.empty();
+		my.$currentPeriod.find('tbody').empty();
+		my.$currentPeriod.prev('p').empty();
+		my.$previousPeriod.find('tbody').empty();
+		my.$previousPeriod.prev('p').empty();
 	};
 
 	my.clockIn = function(status) {
@@ -78,7 +87,7 @@ var timeclock = (function() {
 	}
 
 	function updateStatus(status, time) {
-		$('#current-status').empty().append('<p>' + status + ' ' + Date.create(time).relative(function(value, unit, ms, loc) {
+		my.$currentStatus.empty().append(status + ' ' + Date.create(time).relative(function(value, unit, ms, loc) {
 			if (ms.abs() > (14).hour() && ms.abs() < (7).day()) {
 				return 'on {Weekday} at {12hr}:{mm}{tt}';
 			} else if (ms.abs() >= (7).day()) {
@@ -94,7 +103,7 @@ $(document).ready(function() {
 	timeclock.$select = $('select');
 	timeclock.$clockInBtn = $('#clockIn');
 	timeclock.$clockOutBtn = $('#clockOut');
-	timeclock.$history = $('#history');
+	timeclock.$currentStatus = $('#current-status');
 	timeclock.$currentPeriod = $('#current-period');
 	timeclock.$previousPeriod = $('#previous-period');
 	
@@ -114,4 +123,9 @@ $(document).ready(function() {
 		e.preventDefault();
 		timeclock.clockOut();
 	});
+
+	$('button.close').click(function(e) {
+		e.preventDefault();
+		timeclock.$select.val('0').change();
+	})
 });
