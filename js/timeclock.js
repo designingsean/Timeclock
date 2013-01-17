@@ -20,12 +20,12 @@ var timeclock = (function() {
 		if (timeclock.currentUser > 0) {
 			$.getJSON('api/?action=getStatus&user=' + my.currentUser, function(clock) {
 				if (clock === null || (clock.clockIn !== null && clock.clockOut !== null) ) {
-					my.$clockInBtn.removeAttr('disabled');
-					my.$clockOutBtn.attr('disabled', 'disabled');
+					my.$clockInBtn.removeAttr('disabled').addClass('btn-primary');
+					my.$clockOutBtn.attr('disabled', 'disabled').removeClass('btn-primary');
 					updateStatus("Clocked out", clock.clockOut);
 				} else {
-					my.$clockOutBtn.removeAttr('disabled');
-					my.$clockInBtn.attr('disabled', 'disabled');
+					my.$clockOutBtn.removeAttr('disabled').addClass('btn-primary');
+					my.$clockInBtn.attr('disabled', 'disabled').removeClass('btn-primary');
 					updateStatus("Clocked in", clock.clockIn);
 				}
 				getCurrent();

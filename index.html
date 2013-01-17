@@ -1,16 +1,18 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<title>The Little Gym of West Ashley</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 	<h1>TLG West Ashley</h1>
-	<p><select><option value="0">Who are you?</option></select>
-	<button id="clockIn" disabled>Clock In</button><button id="clockOut" disabled>Clock Out</button></p>
-	<h2>Last Action</h2>
-	<p id="current-status"></p>
+	<p class="form-inline"><select><option value="0">Who are you?</option></select></p>
+	<p class="lead" id="current-status"></p>
+	<p><button class="btn" id="clockIn" disabled>Clock In</button> <button class="btn" id="clockOut" disabled>Clock Out</button></p>
+	<p class="lead" id="current-status"></p>
 	<h2>Current Pay Period</h2>
-	<p></p>
-	<table id="current-period" width="400">
+	<p class="lead"></p>
+	<table class="table table-striped" id="current-period" width="400">
 		<thead>
 			<tr>
 				<th width="25%">Date</th>
@@ -22,8 +24,8 @@
 		<tbody></tbody>
 	</table>
 	<h2>Previous Pay Period</h2>
-	<p></p>
-	<table id="previous-period" width="400">
+	<p class="lead"></p>
+	<table class="table table-striped" id="previous-period" width="400">
 		<thead>
 			<tr>
 				<th width="25%">Date</th>
