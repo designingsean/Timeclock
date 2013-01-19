@@ -10,7 +10,7 @@ if (isset($_GET['user'])) {
 
 switch ($action) {
 	case 'getUsers' :
-		$results = DB::query('SELECT id, name FROM users WHERE active=1 ORDER BY users DESC');
+		$results = DB::query('SELECT id, name FROM users WHERE active=1 ORDER BY name DESC');
 		echo json_encode($results);
 		break;
 	case 'getStatus' :
