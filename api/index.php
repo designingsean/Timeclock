@@ -10,15 +10,11 @@ if (isset($_GET['user'])) {
 
 switch ($action) {
 	case 'getUsers' :
-		$results = DB::query('SELECT id, name FROM users WHERE active=1');
+		$results = DB::query('SELECT id, name FROM users WHERE active=1 ORDER BY users DESC');
 		echo json_encode($results);
 		break;
 	case 'getStatus' :
-		$results = DB::queryFirstRow('SELECT clockIn, clockOut FROM clock WHERE uid=%s ORDER BY id DESC', $user);
-		echo json_encode($results);
-		break;
-	case 'getHistory' :
-		$results = DB::query('SELECT clockIn, clockOut FROM clock WHERE uid=%s ORDER BY id DESC', $user);
+		$results = DB::queryFirstRow('SELECT clockIn, clockOut FROM clock WHERE uid=%s ORDER BY clockIn DESC', $user);
 		echo json_encode($results);
 		break;
 	case 'getCurrent' :
