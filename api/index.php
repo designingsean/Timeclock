@@ -19,7 +19,11 @@ switch ($action) {
 		break;
 	case 'getCurrent' :
 		if ((date('W') % 2) == 0) {
-			$startDate = date('y-m-d', strtotime('last Monday'));
+			if (date('w') == 1) {
+				$startDate = date('y-m-d', strtotime('today'));
+			} else {
+				$startDate = date('y-m-d', strtotime('last Monday'));
+			}
 			$endDate = date('y-m-d', strtotime('next Monday +1 week'));
 		} else {
 			$startDate = date('y-m-d', strtotime('last Monday -1 week'));
@@ -31,7 +35,11 @@ switch ($action) {
 	case 'getPrevious' :
 		if ((date('W') % 2) == 0) {
 			$startDate = date('y-m-d', strtotime('last Monday -2 week'));
-			$endDate = date('y-m-d', strtotime('last Monday'));
+			if (date('w') == 1) {
+				$endDate = date('y-m-d', strtotime('today'));
+			} else {
+				$endDate = date('y-m-d', strtotime('last Monday'));
+			}
 		} else {
 			$startDate = date('y-m-d', strtotime('last Monday -3 week'));
 			$endDate = date('y-m-d', strtotime('last Monday -1 week'));
