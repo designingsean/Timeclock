@@ -56,7 +56,7 @@ function timeClock($scope, $http) {
 	function getTotal(obj) {
 		var total = 0;
 		angular.forEach(obj, function(value, key) {
-			if (obj.totalTime !== null)
+			if (value.totalTime !== null)
 				total += (value.totalTime).toNumber();
 		});
 		return total.round(2);
