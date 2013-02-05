@@ -48,12 +48,15 @@ switch ($action) {
 		break;
 	case 'getPrevious' :
 		if ((date('W') % 2) == 0) {
-			$startDateW1 = date('y-m-d', strtotime('last Monday -2 week'));
-			$endDateW1 = date('y-m-d', strtotime('last Monday -1 week'));
-			$startDateW2 = date('y-m-d', strtotime('last Monday -1 week'));
 			if (date('w') == 1) {
+				$startDateW1 = date('y-m-d', strtotime('last Monday -1 week'));
+				$endDateW1 = date('y-m-d', strtotime('last Monday'));
+				$startDateW2 = date('y-m-d', strtotime('last Monday'));
 				$endDateW2 = date('y-m-d', strtotime('today'));
 			} else {
+				$startDateW1 = date('y-m-d', strtotime('last Monday -2 week'));
+				$endDateW1 = date('y-m-d', strtotime('last Monday -1 week'));
+				$startDateW2 = date('y-m-d', strtotime('last Monday -1 week'));
 				$endDateW2 = date('y-m-d', strtotime('last Monday'));
 			}
 		} else {
