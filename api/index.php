@@ -33,11 +33,12 @@ switch ($action) {
 			$startDateW2 = date('y-m-d', strtotime('next Monday'));
 			$endDateW2 = date('y-m-d', strtotime('next Monday +1 week'));
 		} else {
-			$startDateW1 = date('y-m-d', strtotime('last Monday -1 week'));
 			if (date('w') == 1) {
+				$startDateW1 = date('y-m-d', strtotime('last Monday'));
 				$endDateW1 = date('y-m-d', strtotime('today'));
 				$startDateW2 = date('y-m-d', strtotime('today'));
 			} else {
+				$startDateW1 = date('y-m-d', strtotime('last Monday -1 week'));
 				$endDateW1 = date('y-m-d', strtotime('last Monday'));
 				$startDateW2 = date('y-m-d', strtotime('last Monday'));
 			}
@@ -60,10 +61,17 @@ switch ($action) {
 				$endDateW2 = date('y-m-d', strtotime('last Monday'));
 			}
 		} else {
-			$startDateW1 = date('y-m-d', strtotime('last Monday -3 week'));
-			$endDateW1 = date('y-m-d', strtotime('last Monday -2 week'));
-			$startDateW2 = date('y-m-d', strtotime('last Monday -2 week'));
-			$endDateW2 = date('y-m-d', strtotime('last Monday -1 week'));
+			if (date('w') == 1) {
+				$startDateW1 = date('y-m-d', strtotime('last Monday -2 week'));
+				$endDateW1 = date('y-m-d', strtotime('last Monday -1 week'));
+				$startDateW2 = date('y-m-d', strtotime('last Monday -1 week'));
+				$endDateW2 = date('y-m-d', strtotime('last Monday'));
+			} else {
+				$startDateW1 = date('y-m-d', strtotime('last Monday -3 week'));
+				$endDateW1 = date('y-m-d', strtotime('last Monday -2 week'));
+				$startDateW2 = date('y-m-d', strtotime('last Monday -2 week'));
+				$endDateW2 = date('y-m-d', strtotime('last Monday -1 week'));
+			}
 		}
 		$results = array(getTimes($user, $startDateW2, $endDateW2), getTimes($user, $startDateW1, $endDateW1));
 		echo json_encode($results);
