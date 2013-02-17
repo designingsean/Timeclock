@@ -1,131 +1,91 @@
-var timeclock = (function() {
-	var my = {};
-	my.currentUser = 0;
-	my.$select = null;
-	my.$clockInBtn = null;
-	my.$clockOutBtn = null;
-	my.$currentStatus = null;
-	my.$currentPeriod = null;
-	my.$previousPeriod = null;
+function timeClock($scope, $http) {
+	$scope.currentUser = $scope.totalCurrent = $scope.totalPrevious = 0;
+	$scope.clockedIn = false;
+	
+	//get the list of users
+	$http.get("api/?action=getUsers").success(function(response) {
+		$scope.users = response;
+	});
 
-	my.init = function() {
-		$.getJSON('api/?action=getUsers', function(users) {
-			$.each(users, function(key, user) {
-				my.$select.append('<option value="' + user.id + '">' + user.name + '</option>');
-			});
-		});
-	};
-
-	my.getStatus = function() {
-		if (timeclock.currentUser > 0) {
-			$.getJSON('api/?action=getStatus&user=' + my.currentUser, function(clock) {
-				if (clock === null || (clock.clockIn !== null && clock.clockOut !== null) ) {
-					my.$clockInBtn.removeAttr('disabled').addClass('btn-primary');
-					my.$clockOutBtn.attr('disabled', 'disabled').removeClass('btn-primary');
-					updateStatus("Clocked out", clock.clockOut);
-				} else {
-					my.$clockOutBtn.removeAttr('disabled').addClass('btn-primary');
-					my.$clockInBtn.attr('disabled', 'disabled').removeClass('btn-primary');
-					updateStatus("Clocked in", clock.clockIn);
+	//get a users current status
+	function currentStatus() {
+		$http.get("api/?action=getStatus&user=" + $scope.currentUser).success(function(response) {
+			var currentStatus;
+			var time;
+			if (response === null || (response.clockIn !== null && response.clockOut !== null) ) {
+				currentStatus = "Clocked out ";
+				time = response.clockOut;
+				$scope.clockedIn = false;
+			} else {
+				currentStatus = "Clocked in ";
+				time = response.clockIn;
+				$scope.clockedIn = true;
+			}
+			currentStatus = currentStatus + Date.create(time).relative(function(value, unit, ms, loc) {
+				if (ms.abs() > (14).hour() && ms.abs() < (7).day()) {
+					return "on {Weekday} at {12hr}:{mm}{tt}";
+				} else if (ms.abs() >= (7).day()) {
+					return "on {Weekday}, {Month} {d} at {12hr}:{mm}{tt}";
 				}
-				getCurrent();
-				getPrevious();
 			});
+			$scope.currentStatus = currentStatus
+		});
+	}
+
+	//get the current paycheck's hours
+	function getCurrent() {
+		$http.get("api/?action=getCurrent&user=" + $scope.currentUser).success(function(response) {
+			response[0].weekTotal = getTotal(response[0]);
+			response[1].weekTotal = getTotal(response[1]);
+			$scope.currentTimes = response;
+			$scope.totalCurrent = getTotal(response[0]) + getTotal(response[1]);
+		});
+	}
+
+	//get the previous paycheck's hours
+	function getPrevious() {
+		$http.get("api/?action=getPrevious&user=" + $scope.currentUser).success(function(response) {
+			response[0].weekTotal = getTotal(response[0]);
+			response[1].weekTotal = getTotal(response[1]);
+			$scope.previousTimes = response;
+			$scope.totalPrevious = getTotal(response[0]) + getTotal(response[1]);
+		});
+	}
+
+	//gets total time for a paycheck
+	function getTotal(obj) {
+		var total = 0;
+		angular.forEach(obj, function(value, key) {
+			if (value.totalTime !== null)
+				total += (value.totalTime).toNumber();
+		});
+		return total.round(2);
+	}
+
+	//resets back to basics
+	function reset() {
+		$scope.currentTimes = {};
+		$scope.previousTimes = {};
+		$scope.clockedIn = false;
+		$scope.currentStatus = "";
+		$scope.currentUser = $scope.totalCurrent = $scope.totalPrevious = 0;
+	}
+
+	$scope.getTimes = function() {
+		if($scope.currentUser > 0) {
+			currentStatus();
+			getCurrent();
+			getPrevious();
 		} else {
-			my.reset();
+			reset();
 		}
 	};
 
-	my.reset = function() {
-		my.$clockInBtn.attr('disabled', 'disabled').removeClass('btn-primary');
-		my.$clockOutBtn.attr('disabled', 'disabled').removeClass('btn-primary');
-		my.$currentStatus.empty();
-		my.$currentPeriod.find('tbody').empty();
-		my.$currentPeriod.prev('p').empty();
-		my.$previousPeriod.find('tbody').empty();
-		my.$previousPeriod.prev('p').empty();
-	};
-
-	my.clockIn = function(status) {
-		$.get('api/', { action: "clockIn", user: my.currentUser })
-		.error(function() { alert("error"); })
-		.complete(function() { my.getStatus(); });
-	};
-
-	my.clockOut = function(status) {
-		$.get('api/', { action: "clockOut", user: my.currentUser })
-		.error(function() { alert("error"); })
-		.complete(function() { my.getStatus(); });
-	};
-
-	function getCurrent() {
-		buildTable('api/?action=getCurrent&user=' + my.currentUser, timeclock.$currentPeriod);
+	$scope.clock = function(inOut) {
+		$http.get("api/", { params: { action: inOut, user: $scope.currentUser } }).success($scope.getTimes).error(function() { alert("error"); });
 	}
 
-	function getPrevious() {
-		buildTable('api/?action=getPrevious&user=' + my.currentUser, timeclock.$previousPeriod);
+	$scope.reset = function() {
+		reset();
 	}
-
-	function buildTable(api, $table) {
-		$.getJSON(api, function(clock) {
-			$table.find('tbody').empty();
-			var totalTime = 0;
-			$.each(clock, function(key, row) {
-				var clockOut = '';
-				var timeSpan = '';
-				if (row.clockOut !== null) {
-					clockOut = Date.create(row.clockOut).format('{12hr}:{mm} {tt}');
-					timeSpan = Date.range(row.clockIn, row.clockOut).duration();
-					timeSpan = (timeSpan/3600000).round(2);
-					totalTime += timeSpan;
-				}
-
-				$table.find('tbody').append('<tr><td>' + Date.create(row.clockIn).format('{Dow}, {Mon} {d}') + '</td><td>' + Date.create(row.clockIn).format('{12hr}:{mm} {tt}') + '</td><td>' + clockOut + '</td><td>' + timeSpan + '</td></tr>');
-			});
-			$table.prev('p').empty().append((totalTime).round(2) + ' total hours');
-		});
-	}
-
-	function updateStatus(status, time) {
-		my.$currentStatus.empty().append(status + ' ' + Date.create(time).relative(function(value, unit, ms, loc) {
-			if (ms.abs() > (14).hour() && ms.abs() < (7).day()) {
-				return 'on {Weekday} at {12hr}:{mm}{tt}';
-			} else if (ms.abs() >= (7).day()) {
-				return 'on {Weekday}, {Month} {d} at {12hr}:{mm}{tt}';
-			}
-		}));
-	}
-
-	return my;
-}());
-
-$(document).ready(function() {
-	timeclock.$select = $('select');
-	timeclock.$clockInBtn = $('#clockIn');
-	timeclock.$clockOutBtn = $('#clockOut');
-	timeclock.$currentStatus = $('#current-status');
-	timeclock.$currentPeriod = $('#current-period');
-	timeclock.$previousPeriod = $('#previous-period');
-	
-	timeclock.init();
-
-	timeclock.$select.change(function() {
-		timeclock.currentUser = $(this).val();
-		timeclock.getStatus();
-	});
-
-	timeclock.$clockInBtn.click(function(e) {
-		e.preventDefault();
-		timeclock.clockIn();
-	});
-
-	timeclock.$clockOutBtn.click(function(e) {
-		e.preventDefault();
-		timeclock.clockOut();
-	});
-
-	$('button.close').click(function(e) {
-		e.preventDefault();
-		timeclock.$select.val('0').change();
-	})
-});
+}
