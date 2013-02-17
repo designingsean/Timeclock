@@ -10,7 +10,7 @@ if (isset($_GET['user'])) {
 }
 
 function getTimes($user, $start, $end) {
-	return DB::query('SELECT DATE_FORMAT(clockIn, "%a, %b %e") as clockInDate, DATE_FORMAT(clockIn, "%l:%i %p") as clockInTime, DATE_FORMAT(clockOut, "%l:%i %p") as clockOutTime, ROUND(TIMESTAMPDIFF(MINUTE, clockIn, clockOut)/60, 2) as totalTime FROM clock WHERE uid=%%s AND (clockIn >= %%s AND clockIn < %%s) ORDER BY clockIn DESC', $user, $start, $end);
+	return DB::query('SELECT id, DATE_FORMAT(clockIn, "%a, %b %e") as clockInDate, DATE_FORMAT(clockIn, "%l:%i %p") as clockInTime, DATE_FORMAT(clockOut, "%l:%i %p") as clockOutTime, ROUND(TIMESTAMPDIFF(MINUTE, clockIn, clockOut)/60, 2) as totalTime FROM clock WHERE uid=%%s AND (clockIn >= %%s AND clockIn < %%s) ORDER BY clockIn DESC', $user, $start, $end);
 }
 
 switch ($action) {
@@ -87,6 +87,16 @@ switch ($action) {
 		DB::update('clock', array(
 			'clockOut' => date('Y-m-d H:i:s'),
 		), 'id=%%s', $results['id']);
+		break;
+	case 'adminAdd' :
+		DB::insert('clock', array(
+			'uid' => $user,
+			'clockIn' => $_GET['start'],
+			'clockOut' => $_GET['end'],
+		));
+		break;
+	case 'adminDelete' :
+		DB::delete('clock', "id=%%s", $_GET['id']);
 		break;
 }
 ?>
