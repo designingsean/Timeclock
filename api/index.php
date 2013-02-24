@@ -14,6 +14,7 @@ function getTimes($user, $start, $end) {
 }
 
 switch ($action) {
+	//base functions
 	case 'getUsers' :
 		$results = DB::query('SELECT id, name FROM users WHERE active=1 ORDER BY name ASC');
 		echo json_encode($results);
@@ -88,6 +89,8 @@ switch ($action) {
 			'clockOut' => date('Y-m-d H:i:s'),
 		), 'id=%%s', $results['id']);
 		break;
+
+	//administrative functions
 	case 'adminAdd' :
 		DB::insert('clock', array(
 			'uid' => $user,
@@ -98,5 +101,20 @@ switch ($action) {
 	case 'adminDelete' :
 		DB::delete('clock', "id=%%s", $_GET['id']);
 		break;
+	case 'adminAddUser' :
+		DB::insert('users', array(
+			'name' => $_GET['user']
+		));
+		break;
+	case 'adminUpdateUser' :
+		DB::update('users', array(
+			'active' => $_GET['active'],
+		), 'id=%%s', $_GET['id']);
+		break;
+	case 'adminInactiveUsers' :
+		$results = DB::query('SELECT id, name FROM users WHERE active=0 ORDER BY name ASC');
+		echo json_encode($results);
+		break;
+	//reporting functions
 }
 ?>
