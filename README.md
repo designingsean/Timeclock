@@ -17,6 +17,7 @@ Meekro 2.1
 Database Structure
 ==================
 User table:
+
 	CREATE TABLE `users` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 	  `name` varchar(20) NOT NULL DEFAULT '',
@@ -25,6 +26,7 @@ User table:
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 Timeclock table:
+
 	CREATE TABLE `clock` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 	  `uid` int(11) NOT NULL,
@@ -36,6 +38,7 @@ Timeclock table:
 Misc.
 =====
 db.config.php file omitted for obvious reasons. Format is below:
+
 	DB::$user = 'DBUSER';
 	DB::$password = 'DBPASS';
 	DB::$dbName = 'DBNAME';
