@@ -1,0 +1,19 @@
+<p class="form-inline" ><input type="text" ng-model="newUser"><button class="btn" ng-click="addUser()">Add Employee</button></p>
+<h2>Active Employees</h2>
+<table class="table table-striped" width="400">
+    <tbody>
+        <tr ng-repeat="user in activeUsers">
+            <td width="80%">{{user.name}}</td>
+            <td width="20%"><a href="#" ng-click="updateUser('deactivate', user)">Deactivate</a></td>
+        </tr>
+    </tbody>
+</table>
+<h2>Inactive Employees</h2>
+<table class="table table-striped" width="400">
+    <tbody>
+        <tr ng-repeat="user in inactiveUsers">
+            <td width="80%">{{user.name}}</td>
+            <td width="20%"><a href="#" ng-click="updateUser('activate', user)">Activate</a></td>
+        </tr>
+    </tbody>
+</table>

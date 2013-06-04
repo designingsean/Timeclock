@@ -1,15 +1,15 @@
-function timeClock($scope, $http) {
+function clock($scope, $http) {
 	$scope.currentUser = $scope.totalCurrent = $scope.totalPrevious = 0;
 	$scope.clockedIn = false;
-	
+
 	//get the list of users
-	$http.get("api/?action=getUsers").success(function(response) {
+	$http.get("/timeclock/api/index-old.php?action=getUsers").success(function(response) {
 		$scope.users = response;
 	});
 
 	//get a users current status
 	function currentStatus() {
-		$http.get("api/?action=getStatus&user=" + $scope.currentUser).success(function(response) {
+		$http.get("/timeclock/api/index-old.php?action=getStatus&user=" + $scope.currentUser).success(function(response) {
 			var currentStatus;
 			var time;
 			if (response === null || (response.clockIn !== null && response.clockOut !== null) ) {
@@ -34,7 +34,7 @@ function timeClock($scope, $http) {
 
 	//get the current paycheck's hours
 	function getCurrent() {
-		$http.get("api/?action=getCurrent&user=" + $scope.currentUser).success(function(response) {
+		$http.get("/timeclock/api/index-old.php?action=getCurrent&user=" + $scope.currentUser).success(function(response) {
 			response[0].weekTotal = getTotal(response[0]);
 			response[1].weekTotal = getTotal(response[1]);
 			$scope.currentTimes = response;
@@ -44,7 +44,7 @@ function timeClock($scope, $http) {
 
 	//get the previous paycheck's hours
 	function getPrevious() {
-		$http.get("api/?action=getPrevious&user=" + $scope.currentUser).success(function(response) {
+		$http.get("/timeclock/api/index-old.php?action=getPrevious&user=" + $scope.currentUser).success(function(response) {
 			response[0].weekTotal = getTotal(response[0]);
 			response[1].weekTotal = getTotal(response[1]);
 			$scope.previousTimes = response;
@@ -82,7 +82,7 @@ function timeClock($scope, $http) {
 	};
 
 	$scope.clock = function(inOut) {
-		$http.get("api/", { params: { action: inOut, user: $scope.currentUser } }).success($scope.getTimes).error(function() { alert("error"); });
+		$http.get("/timeclock/api/index-old.php", { params: { action: inOut, user: $scope.currentUser } }).success($scope.getTimes).error(function() { alert("error"); });
 	}
 
 	$scope.reset = function() {
