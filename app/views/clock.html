@@ -2,7 +2,7 @@
 <p class="lead">{{currentStatus}}</p>
 <p class="form-inline"><button class="btn" id="clockIn" ng-disabled="clockedIn || currentUser==0" ng-click="clock('clockIn')">Clock In</button> <button class="btn" id="clockOut" ng-disabled="!clockedIn" ng-click="clock('clockOut')">Clock Out</button></p>
 <h2>Current Pay Period</h2>
-<p class="lead">{{totalCurrent}} total hours</p>
+<p class="lead">{{currentTimes.payperiodTotal}} total hours</p>
 <table class="table table-striped" width="400">
     <thead>
         <tr>
@@ -13,24 +13,40 @@
         </tr>
     </thead>
 </table>
-<table class="table table-striped" width="400" ng-repeat="currentTime in currentTimes" ng-show="currentTime">
+<table class="table table-striped" width="400">
     <thead>
         <tr>
             <th colspan="3" width="75%">Week Total</th>
-            <th width="25%">{{currentTime.weekTotal}}</th>
+            <th width="25%">{{currentTimes.secondWeekTotal}}</th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="cT in currentTime">
-            <td width="25%">{{cT.clockInDate}}</td>
-            <td width="25%">{{cT.clockInTime}}</td>
-            <td width="25%">{{cT.clockOutTime}}</td>
-            <td width="25%">{{cT.totalTime}}</td>
+        <tr ng-repeat="currentTime in currentTimes.secondWeek">
+            <td width="25%">{{currentTime.clockInDate}}</td>
+            <td width="25%">{{currentTime.clockInTime}}</td>
+            <td width="25%">{{currentTime.clockOutTime}}</td>
+            <td width="25%">{{currentTime.totalTime}}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="table table-striped" width="400">
+    <thead>
+        <tr>
+            <th colspan="3" width="75%">Week Total</th>
+            <th width="25%">{{currentTimes.firstWeekTotal}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="currentTime in currentTimes.firstWeek">
+            <td width="25%">{{currentTime.clockInDate}}</td>
+            <td width="25%">{{currentTime.clockInTime}}</td>
+            <td width="25%">{{currentTime.clockOutTime}}</td>
+            <td width="25%">{{currentTime.totalTime}}</td>
         </tr>
     </tbody>
 </table>
 <h2>Previous Pay Period</h2>
-<p class="lead">{{totalPrevious}} total hours</p>
+<p class="lead">{{previousTimes.payperiodTotal}} total hours</p>
 <table class="table table-striped" width="400">
     <thead>
         <tr>
@@ -41,19 +57,35 @@
         </tr>
     </thead>
 </table>
-<table class="table table-striped" width="400" ng-repeat="previousTime in previousTimes" ng-show="previousTime">
+<table class="table table-striped" width="400">
     <thead>
         <tr>
             <th colspan="3" width="75%">Week Total</th>
-            <th width="25%">{{previousTime.weekTotal}}</th>
+            <th width="25%">{{previousTimes.secondWeekTotal}}</th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="pT in previousTime">
-            <td width="25%">{{pT.clockInDate}}</td>
-            <td width="25%">{{pT.clockInTime}}</td>
-            <td width="25%">{{pT.clockOutTime}}</td>
-            <td width="25%">{{pT.totalTime}}</td>
+        <tr ng-repeat="previousTime in previousTimes.secondWeek">
+            <td width="25%">{{previousTime.clockInDate}}</td>
+            <td width="25%">{{previousTime.clockInTime}}</td>
+            <td width="25%">{{previousTime.clockOutTime}}</td>
+            <td width="25%">{{previousTime.totalTime}}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="table table-striped" width="400">
+    <thead>
+        <tr>
+            <th colspan="3" width="75%">Week Total</th>
+            <th width="25%">{{previousTimes.firstWeekTotal}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="previousTime in previousTimes.firstWeek">
+            <td width="25%">{{previousTime.clockInDate}}</td>
+            <td width="25%">{{previousTime.clockInTime}}</td>
+            <td width="25%">{{previousTime.clockOutTime}}</td>
+            <td width="25%">{{previousTime.totalTime}}</td>
         </tr>
     </tbody>
 </table>
