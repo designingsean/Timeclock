@@ -52,10 +52,14 @@ switch ($_GET['action']) {
 
     case 'clockGet' :
         //-get = current, past, report
-        //---pass in start date (required), end date (required), user id (required)
+        //---pass in start date and end date (optional), user id (required)
         //---return id, user id, date, clock in, clock out
-        if (isset($_GET['user']) && isset($_GET['start']) && isset($_GET['end'])) {
-            $results = DB::query('SELECT id, DATE_FORMAT(clockIn, "%a, %b %e") as clockInDate, DATE_FORMAT(clockIn, "%l:%i %p") as clockInTime, DATE_FORMAT(clockOut, "%l:%i %p") as clockOutTime, ROUND(TIMESTAMPDIFF(MINUTE, clockIn, clockOut)/60, 2) as totalTime FROM clock WHERE uid=%%s AND (clockIn >= %%s AND clockIn < %%s) ORDER BY clockIn DESC', $_GET['user'], $_GET['start'], $_GET['end']);
+        if (isset($_GET['user'])) {
+            if (isset($_GET['start']) && isset($_GET['end'])) {
+                $results = DB::query('SELECT id, DATE_FORMAT(clockIn, "%a, %b %e") as clockInDate, DATE_FORMAT(clockIn, "%l:%i %p") as clockInTime, DATE_FORMAT(clockOut, "%l:%i %p") as clockOutTime, ROUND(TIMESTAMPDIFF(MINUTE, clockIn, clockOut)/60, 2) as totalTime FROM clock WHERE uid=%%s AND (clockIn >= %%s AND clockIn < %%s) ORDER BY clockIn DESC', $_GET['user'], $_GET['start'], $_GET['end']);
+            } else {
+                $results = DB::queryFirstRow('SELECT id, clockIn, clockOut FROM clock WHERE uid=%%s ORDER BY clockIn DESC', $_GET['user']);
+            }
         }
     break;
 
