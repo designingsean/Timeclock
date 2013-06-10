@@ -1,15 +1,15 @@
-timeclock.controller('clock', function clock($scope, $http, payperiodFactory, totaltimeFactory) {
-    $scope.currentUser = $scope.totalCurrent = $scope.totalPrevious = 0;
+timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, payperiodFactory, totaltimeFactory) {
+    $scope.currentUser = 0;
     $scope.clockedIn = false;
 
     //get the list of users
-    $http.get("/timeclock/api/?action=usersGet&active=1").success(function(response) {
+    usersApi.get(1, function(err, response) {
         $scope.users = response;
     });
 
     //get a users current status
     function currentStatus() {
-        $http.get("/timeclock/api/index-old.php?action=getStatus&user=" + $scope.currentUser).success(function(response) {
+        clockApi.getLast($scope.currentUser, function(err, response) {
             var currentStatus;
             var time;
             if (response === null || (response.clockIn !== null && response.clockOut !== null) ) {
@@ -35,12 +35,12 @@ timeclock.controller('clock', function clock($scope, $http, payperiodFactory, to
     function getTimes(date) {
         var obj = {};
         var periodDates = payperiodFactory.periodDates(date);
-        $http.get("/timeclock/api/?action=clockGet&user=" + $scope.currentUser + "&start=" + periodDates.firstWeekStart + "&end=" + periodDates.firstWeekEnd).success(function(response) {
+        clockApi.get($scope.currentUser, periodDates.firstWeekStart, periodDates.firstWeekEnd, function(err, response) {
             obj.firstWeekTotal = totaltimeFactory.getTotal(response);
             obj.firstWeek = response;
             obj.payperiodTotal = obj.firstWeekTotal;
         });
-        $http.get("/timeclock/api/?action=clockGet&user=" + $scope.currentUser + "&start=" + periodDates.secondWeekStart + "&end=" + periodDates.secondWeekEnd).success(function(response) {
+        clockApi.get($scope.currentUser, periodDates.secondWeekStart, periodDates.secondWeekEnd, function(err, response) {
             obj.secondWeekTotal = totaltimeFactory.getTotal(response);
             obj.secondWeek = response;
             obj.payperiodTotal += obj.secondWeekTotal;
@@ -54,7 +54,7 @@ timeclock.controller('clock', function clock($scope, $http, payperiodFactory, to
         $scope.previousTimes = {};
         $scope.clockedIn = false;
         $scope.currentStatus = "";
-        $scope.currentUser = $scope.totalCurrent = $scope.totalPrevious = 0;
+        $scope.currentUser = 0;
     }
 
     $scope.getTimes = function() {
@@ -68,8 +68,17 @@ timeclock.controller('clock', function clock($scope, $http, payperiodFactory, to
     };
 
     $scope.clock = function(inOut) {
-        $http.get("/timeclock/api/index-old.php", { params: { action: inOut, user: $scope.currentUser } }).success($scope.getTimes).error(function() { alert("error"); });
-    }
+        //$http.get("/timeclock/api/index-old.php", { params: { action: inOut, user: $scope.currentUser } }).success($scope.getTimes).error(function() { alert("error"); });
+        if(inOut === "clockIn") {
+            clockApi.clockIn($scope.currentUser, function(err, response) {
+                $scope.getTimes();
+            });
+        } else {
+            clockApi.clockOut($scope.currentUser, function(err, response) {
+                $scope.getTimes();
+            });
+        }
+    };
 
     $scope.reset = function() {
         reset();
