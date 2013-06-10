@@ -1,91 +1,93 @@
 <p class="form-inline"><select ng-model="currentUser" ng-change="getTimes()"><option value="0">Who are you?</option><option ng-repeat="user in users" value="{{user.id}}">{{user.name}}</option></select> <button class="close" ng-click="reset()" style="float:none;">&times;</button></p>
 <p class="lead">{{currentStatus}}</p>
 <p class="form-inline"><button class="btn" id="clockIn" ng-disabled="clockedIn || currentUser==0" ng-click="clock('clockIn')">Clock In</button> <button class="btn" id="clockOut" ng-disabled="!clockedIn" ng-click="clock('clockOut')">Clock Out</button></p>
-<h2>Current Pay Period</h2>
-<p class="lead">{{currentTimes.payperiodTotal}} total hours</p>
-<table class="table table-striped" width="400">
-    <thead>
-        <tr>
-            <th width="25%">Date</th>
-            <th width="25%">In</th>
-            <th width="25%">Out</th>
-            <th width="25%">Total</th>
-        </tr>
-    </thead>
-</table>
-<table class="table table-striped" width="400">
-    <thead>
-        <tr>
-            <th colspan="3" width="75%">Week Total</th>
-            <th width="25%">{{currentTimes.secondWeekTotal}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="currentTime in currentTimes.secondWeek">
-            <td width="25%">{{currentTime.clockInDate}}</td>
-            <td width="25%">{{currentTime.clockInTime}}</td>
-            <td width="25%">{{currentTime.clockOutTime}}</td>
-            <td width="25%">{{currentTime.totalTime}}</td>
-        </tr>
-    </tbody>
-</table>
-<table class="table table-striped" width="400">
-    <thead>
-        <tr>
-            <th colspan="3" width="75%">Week Total</th>
-            <th width="25%">{{currentTimes.firstWeekTotal}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="currentTime in currentTimes.firstWeek">
-            <td width="25%">{{currentTime.clockInDate}}</td>
-            <td width="25%">{{currentTime.clockInTime}}</td>
-            <td width="25%">{{currentTime.clockOutTime}}</td>
-            <td width="25%">{{currentTime.totalTime}}</td>
-        </tr>
-    </tbody>
-</table>
-<h2>Previous Pay Period</h2>
-<p class="lead">{{previousTimes.payperiodTotal}} total hours</p>
-<table class="table table-striped" width="400">
-    <thead>
-        <tr>
-            <th width="25%">Date</th>
-            <th width="25%">In</th>
-            <th width="25%">Out</th>
-            <th width="25%">Total</th>
-        </tr>
-    </thead>
-</table>
-<table class="table table-striped" width="400">
-    <thead>
-        <tr>
-            <th colspan="3" width="75%">Week Total</th>
-            <th width="25%">{{previousTimes.secondWeekTotal}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="previousTime in previousTimes.secondWeek">
-            <td width="25%">{{previousTime.clockInDate}}</td>
-            <td width="25%">{{previousTime.clockInTime}}</td>
-            <td width="25%">{{previousTime.clockOutTime}}</td>
-            <td width="25%">{{previousTime.totalTime}}</td>
-        </tr>
-    </tbody>
-</table>
-<table class="table table-striped" width="400">
-    <thead>
-        <tr>
-            <th colspan="3" width="75%">Week Total</th>
-            <th width="25%">{{previousTimes.firstWeekTotal}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="previousTime in previousTimes.firstWeek">
-            <td width="25%">{{previousTime.clockInDate}}</td>
-            <td width="25%">{{previousTime.clockInTime}}</td>
-            <td width="25%">{{previousTime.clockOutTime}}</td>
-            <td width="25%">{{previousTime.totalTime}}</td>
-        </tr>
-    </tbody>
-</table>
+<div ng-show="currentUser">
+    <h2>Current Pay Period</h2>
+    <p class="lead">{{currentTimes.payperiodTotal}} total hours</p>
+    <table class="table table-striped" width="400">
+        <thead>
+            <tr>
+                <th width="25%">Date</th>
+                <th width="25%">In</th>
+                <th width="25%">Out</th>
+                <th width="25%">Total</th>
+            </tr>
+        </thead>
+    </table>
+    <table class="table table-striped" width="400">
+        <thead>
+            <tr>
+                <th colspan="3" width="75%">Week Total</th>
+                <th width="25%">{{currentTimes.secondWeekTotal}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="currentTime in currentTimes.secondWeek">
+                <td width="25%">{{currentTime.clockInDate}}</td>
+                <td width="25%">{{currentTime.clockInTime}}</td>
+                <td width="25%">{{currentTime.clockOutTime}}</td>
+                <td width="25%">{{currentTime.totalTime}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-striped" width="400">
+        <thead>
+            <tr>
+                <th colspan="3" width="75%">Week Total</th>
+                <th width="25%">{{currentTimes.firstWeekTotal}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="currentTime in currentTimes.firstWeek">
+                <td width="25%">{{currentTime.clockInDate}}</td>
+                <td width="25%">{{currentTime.clockInTime}}</td>
+                <td width="25%">{{currentTime.clockOutTime}}</td>
+                <td width="25%">{{currentTime.totalTime}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Previous Pay Period</h2>
+    <p class="lead">{{previousTimes.payperiodTotal}} total hours</p>
+    <table class="table table-striped" width="400">
+        <thead>
+            <tr>
+                <th width="25%">Date</th>
+                <th width="25%">In</th>
+                <th width="25%">Out</th>
+                <th width="25%">Total</th>
+            </tr>
+        </thead>
+    </table>
+    <table class="table table-striped" width="400">
+        <thead>
+            <tr>
+                <th colspan="3" width="75%">Week Total</th>
+                <th width="25%">{{previousTimes.secondWeekTotal}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="previousTime in previousTimes.secondWeek">
+                <td width="25%">{{previousTime.clockInDate}}</td>
+                <td width="25%">{{previousTime.clockInTime}}</td>
+                <td width="25%">{{previousTime.clockOutTime}}</td>
+                <td width="25%">{{previousTime.totalTime}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-striped" width="400">
+        <thead>
+            <tr>
+                <th colspan="3" width="75%">Week Total</th>
+                <th width="25%">{{previousTimes.firstWeekTotal}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="previousTime in previousTimes.firstWeek">
+                <td width="25%">{{previousTime.clockInDate}}</td>
+                <td width="25%">{{previousTime.clockInTime}}</td>
+                <td width="25%">{{previousTime.clockOutTime}}</td>
+                <td width="25%">{{previousTime.totalTime}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

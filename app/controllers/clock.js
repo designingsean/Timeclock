@@ -68,7 +68,6 @@ timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, 
     };
 
     $scope.clock = function(inOut) {
-        //$http.get("/timeclock/api/index-old.php", { params: { action: inOut, user: $scope.currentUser } }).success($scope.getTimes).error(function() { alert("error"); });
         if(inOut === "clockIn") {
             clockApi.clockIn($scope.currentUser, function(err, response) {
                 $scope.getTimes();
@@ -82,5 +81,5 @@ timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, 
 
     $scope.reset = function() {
         reset();
-    }
+    };
 });
