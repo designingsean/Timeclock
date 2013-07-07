@@ -13,14 +13,8 @@ timeclock.factory('usersApi', ['$http', function($http) {
         add : function(name) {
             //
         },
-        get : function(active, callback) {
-            $http.get("/timeclock/api/?action=usersGet&active=" + active)
-                .success(function(response) {
-                    callback(null, response);
-                })
-                .error(function(response) {
-                    callback(response, null);
-                });
+        get : function(active) {
+            return $http.get("/timeclock/api/?action=usersGet&active=" + active);
         },
         update : function(id) {
             //
@@ -32,46 +26,21 @@ timeclock.factory('clockApi', ['$http', function($http) {
         add : function(user, start, end) {
             //
         },
-        clockIn : function(user, callback) {
-            $http.get("/timeclock/api/?action=clockAdd&user=" + user)
-                .success(function(response) {
-                    callback(null, response);
-                })
-                .error(function(response) {
-                    callback(response, null);
-                });
+        clockIn : function(user) {
+            return $http.get("/timeclock/api/?action=clockAdd&user=" + user);
         },
-        get : function(user, start, end, callback) {
-            $http.get("/timeclock/api/?action=clockGet&user=" + user + "&start=" + start + "&end=" + end)
-                .success(function(response) {
-                    callback(null, response);
-                })
-                .error(function(response) {
-                    callback(response, null);
-                });
+        get : function(user, start, end) {
+            return $http.get("/timeclock/api/?action=clockGet&user=" + user + "&start=" + start + "&end=" + end);
         },
-        getLast : function(user, callback) {
-            $http.get("/timeclock/api/?action=clockGet&user=" + user)
-                .success(function(response) {
-                    callback(null, response);
-                })
-                .error(function(response) {
-                    callback(response, null);
-                });
+        getLast : function(user) {
+            return $http.get("/timeclock/api/?action=clockGet&user=" + user);
         },
         update : function(id, start, end) {
             //
         },
-        clockOut : function(user, callback) {
-            getLast(user, function(err, response) {
-                console.log(response);
-                $http.get("/timeclock/api/?action=clockUpdate&id=" + id + "&end=" + end)
-                    .success(function(response) {
-                        callback(null, response);
-                    })
-                    .error(function(response) {
-                        callback(response, null);
-                    });
+        clockOut : function(user, end) {
+            getLast(user).then(function(response) {
+                return $http.get("/timeclock/api/?action=clockUpdate&id=" + response.data.id + "&end=" + end);
             });
         },
         delete : function(id) {

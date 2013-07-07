@@ -3,47 +3,47 @@ timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, 
     $scope.clockedIn = false;
 
     //get the list of users
-    usersApi.get(1, function(err, response) {
-        $scope.users = response;
+    usersApi.get(1).then(function(response) {
+        $scope.users = response.data;
     });
 
     //get a users current status
-    function currentStatus() {
-        clockApi.getLast($scope.currentUser, function(err, response) {
-            var currentStatus;
-            var time;
-            if (response === null || (response.clockIn !== null && response.clockOut !== null) ) {
-                currentStatus = "Clocked out ";
-                time = response.clockOut;
+    function getStatus(user) {
+        var status;
+        var time;
+        clockApi.getLast($scope.currentUser).then(function(response) {
+            if (response.data.clockIn !== null && response.data.clockOut !== null) {
+                status = "Clocked out ";
+                time = response.data.clockOut;
                 $scope.clockedIn = false;
             } else {
-                currentStatus = "Clocked in ";
-                time = response.clockIn;
+                status = "Clocked in ";
+                time = response.data.clockIn;
                 $scope.clockedIn = true;
             }
-            currentStatus = currentStatus + Date.create(time).relative(function(value, unit, ms, loc) {
+            status = status + Date.create(time).relative(function(value, unit, ms, loc) {
                 if (ms.abs() > (14).hour() && ms.abs() < (7).day()) {
                     return "on {Weekday} at {12hr}:{mm}{tt}";
                 } else if (ms.abs() >= (7).day()) {
                     return "on {Weekday}, {Month} {d} at {12hr}:{mm}{tt}";
                 }
             });
-            $scope.currentStatus = currentStatus;
+            $scope.currentStatus = status;
         });
     }
 
     function getTimes(date) {
         var obj = {};
         var periodDates = payperiodFactory.periodDates(date);
-        clockApi.get($scope.currentUser, periodDates.firstWeekStart, periodDates.firstWeekEnd, function(err, response) {
-            obj.firstWeekTotal = totaltimeFactory.getTotal(response);
-            obj.firstWeek = response;
+        clockApi.get($scope.currentUser, periodDates.firstWeekStart, periodDates.firstWeekEnd).then(function(response) {
+            obj.firstWeekTotal = totaltimeFactory.getTotal(response.data);
+            obj.firstWeek = response.data;
             obj.payperiodTotal = obj.firstWeekTotal;
         });
-        clockApi.get($scope.currentUser, periodDates.secondWeekStart, periodDates.secondWeekEnd, function(err, response) {
-            obj.secondWeekTotal = totaltimeFactory.getTotal(response);
-            obj.secondWeek = response;
-            obj.payperiodTotal += obj.secondWeekTotal;
+        clockApi.get($scope.currentUser, periodDates.secondWeekStart, periodDates.secondWeekEnd).then(function(response) {
+            obj.secondWeekTotal = totaltimeFactory.getTotal(response.data);
+            obj.secondWeek = response.data;
+            obj.payperiodTotal = obj.secondWeekTotal;
         });
         return obj;
     }
@@ -59,7 +59,7 @@ timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, 
 
     $scope.getTimes = function() {
         if($scope.currentUser > 0) {
-            currentStatus();
+            getStatus($scope.currentUser);
             $scope.currentTimes = getTimes(Date.create());
             $scope.previousTimes = getTimes(Date.create().rewind({ days: 14 }));
         } else {
