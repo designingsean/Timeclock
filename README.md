@@ -2,6 +2,8 @@ Timeclock
 =========
 A simple time clock application for hourly employees
 
+NOTE: I am currently rebuilding this app, and so it really isn't ready for production.
+
 License
 =======
 [![Creative Commons by-sa](http://i.creativecommons.org/l/by-sa/3.0/us/88x31.png)](http://creativecommons.org/licenses/by-sa/3.0/us/deed.en_US)
@@ -11,7 +13,11 @@ Timeclock by [Sean Ryan](http://designingsean.com) is licensed under a [Creative
 Required Libraries
 ==================
 jQuery 1.8.3
-Sugar JS 1.3.8
+
+AngularJS 1.0.7
+
+MomentJS 2.0.0
+
 Meekro 2.1
 
 Database Structure
