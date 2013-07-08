@@ -49,21 +49,20 @@ timeclock.factory('clockApi', ['$http', function($http) {
     };
 }]);
 timeclock.factory('payperiodFactory', function() {
-    var dateStart = (Date.create('2013-01-07').getISOWeek())%2;
+    var dateStart = moment('2013-01-07').isoWeek()%2;
     return {
         periodDates : function(date) {
-            var dateObj = {};
-            date = Date.create(date);
-            if (date.getISOWeek()%2 === dateStart) {
-                date.isSunday() ? date.rewind({ days: 6 }) : date.beginningOfWeek().advance({ days:1 });
+            var momentObj = {};
+            momentDate = moment(date);
+            if (momentDate.isoWeek()%2 === dateStart) {
+                momentDate.day()===0 ? momentDate.day(-7) : momentDate.startOf('week').day(1);
             } else {
-                date.isSunday() ? date.rewind({ days:13 }) : date.beginningOfWeek().rewind({ days: 6 });
+                momentDate.day()===0 ? momentDate.day(-13) : momentDate.startOf('week').day(-6);
             }
-            dateObj['firstWeekStart'] = date.format('{yyyy}-{MM}-{dd}');
-            dateObj['firstWeekEnd'] = Date.create(date).advance({ days: 7 }).format('{yyyy}-{MM}-{dd}');
-            dateObj['secondWeekStart'] = Date.create(date).advance({ days: 7 }).format('{yyyy}-{MM}-{dd}');
-            dateObj['secondWeekEnd']  = Date.create(date).advance({ days: 14 }).format('{yyyy}-{MM}-{dd}');
-            return dateObj;
+            momentObj['firstWeekStart'] = momentDate.format('YYYY-MM-DD');
+            momentObj['secondWeekStart'] = momentObj['firstWeekEnd'] = moment(momentDate).day(8).format('YYYY-MM-DD');
+            momentObj['secondWeekEnd']  = moment(momentDate).day(15).format('YYYY-MM-DD');
+            return momentObj;
         }
     };
 });
@@ -73,9 +72,9 @@ timeclock.factory('totaltimeFactory', function() {
             var total = 0;
             angular.forEach(obj, function(value, key) {
                 if (value.totalTime !== null)
-                    total += (value.totalTime).toNumber();
+                    total += Number(value.totalTime);
             });
-            return total.round(2);
+            return total;
         }
     };
 });

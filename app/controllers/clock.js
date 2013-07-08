@@ -10,24 +10,14 @@ timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, 
     //get a users current status
     function getStatus(user) {
         var status;
-        var time;
         clockApi.getLast($scope.currentUser).then(function(response) {
             if (response.data.clockIn !== null && response.data.clockOut !== null) {
-                status = "Clocked out ";
-                time = response.data.clockOut;
+                status = "Clocked out " + moment(response.data.clockOut).fromNow();
                 $scope.clockedIn = false;
             } else {
-                status = "Clocked in ";
-                time = response.data.clockIn;
+                status = "Clocked in " + moment(response.data.clockIn).fromNow();
                 $scope.clockedIn = true;
             }
-            status = status + Date.create(time).relative(function(value, unit, ms, loc) {
-                if (ms.abs() > (14).hour() && ms.abs() < (7).day()) {
-                    return "on {Weekday} at {12hr}:{mm}{tt}";
-                } else if (ms.abs() >= (7).day()) {
-                    return "on {Weekday}, {Month} {d} at {12hr}:{mm}{tt}";
-                }
-            });
             $scope.currentStatus = status;
         });
     }
@@ -61,8 +51,8 @@ timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, 
     $scope.getTimes = function() {
         if($scope.currentUser > 0) {
             getStatus($scope.currentUser);
-            $scope.currentTimes = getTimes(Date.create());
-            $scope.previousTimes = getTimes(Date.create().rewind({ days: 14 }));
+            $scope.currentTimes = getTimes(moment());
+            $scope.previousTimes = getTimes(moment().day(-14));
         } else {
             reset();
         }
@@ -74,7 +64,7 @@ timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, 
                 $scope.getTimes();
             });
         } else {
-            clockApi.clockOut($scope.currentUser, Date.create().format("{yyyy}-{MM}-{dd} {HH}:{mm}:{ss}")).then(function() {
+            clockApi.clockOut($scope.currentUser, moment().format("YYYY-MM-DD HH:mm:ss")).then(function() {
                 $scope.getTimes();
             });
         }
