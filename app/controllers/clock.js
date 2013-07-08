@@ -1,4 +1,4 @@
-timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, payperiodFactory, totaltimeFactory) {
+timeclock.controller('clock', function clock($scope, usersApi, clockApi, payperiodFactory, totaltimeFactory) {
     $scope.currentUser = 0;
     $scope.clockedIn = false;
 
