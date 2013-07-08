@@ -34,16 +34,17 @@ timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, 
 
     function getTimes(date) {
         var obj = {};
+        obj.payperiodTotal = 0;
         var periodDates = payperiodFactory.periodDates(date);
         clockApi.get($scope.currentUser, periodDates.firstWeekStart, periodDates.firstWeekEnd).then(function(response) {
             obj.firstWeekTotal = totaltimeFactory.getTotal(response.data);
             obj.firstWeek = response.data;
-            obj.payperiodTotal = obj.firstWeekTotal;
+            obj.payperiodTotal += obj.firstWeekTotal;
         });
         clockApi.get($scope.currentUser, periodDates.secondWeekStart, periodDates.secondWeekEnd).then(function(response) {
             obj.secondWeekTotal = totaltimeFactory.getTotal(response.data);
             obj.secondWeek = response.data;
-            obj.payperiodTotal = obj.secondWeekTotal;
+            obj.payperiodTotal += obj.secondWeekTotal;
         });
         return obj;
     }
