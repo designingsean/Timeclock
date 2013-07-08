@@ -52,7 +52,7 @@ timeclock.controller('clock', function clock($scope, usersApi, clockApi, payperi
         if($scope.currentUser > 0) {
             getStatus($scope.currentUser);
             $scope.currentTimes = getTimes(moment());
-            $scope.previousTimes = getTimes(moment().day(-14));
+            $scope.previousTimes = getTimes(moment().day(-13));
         } else {
             reset();
         }
