@@ -39,7 +39,7 @@ timeclock.factory('clockApi', ['$http', function($http) {
             //
         },
         clockOut : function(user, end) {
-            getLast(user).then(function(response) {
+            return this.getLast(user).then(function(response) {
                 return $http.get("/timeclock/api/?action=clockUpdate&id=" + response.data.id + "&end=" + end);
             });
         },

@@ -69,11 +69,11 @@ timeclock.controller('clock', function clock($scope, $http, usersApi, clockApi, 
 
     $scope.clock = function(inOut) {
         if(inOut === "clockIn") {
-            clockApi.clockIn($scope.currentUser, function(err, response) {
+            clockApi.clockIn($scope.currentUser).then(function() {
                 $scope.getTimes();
             });
         } else {
-            clockApi.clockOut($scope.currentUser, function(err, response) {
+            clockApi.clockOut($scope.currentUser, Date.create().format("{yyyy}-{MM}-{dd} {HH}:{mm}:{ss}")).then(function() {
                 $scope.getTimes();
             });
         }
