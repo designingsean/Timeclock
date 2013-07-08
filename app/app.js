@@ -24,7 +24,7 @@ timeclock.factory('usersApi', ['$http', function($http) {
 timeclock.factory('clockApi', ['$http', function($http) {
     return {
         add : function(user, start, end) {
-            //
+            return $http.get("/timeclock/api/?action=clockAdd&user=" + user + "&start=" + start + "&end=" + end);
         },
         clockIn : function(user) {
             return $http.get("/timeclock/api/?action=clockAdd&user=" + user);
@@ -36,7 +36,7 @@ timeclock.factory('clockApi', ['$http', function($http) {
             return $http.get("/timeclock/api/?action=clockGet&user=" + user);
         },
         update : function(id, start, end) {
-            //
+            return $http.get("/timeclock/api/?action=clockUpdate&id=" + id + "&start=" + start + "&end=" + end);
         },
         clockOut : function(user, end) {
             return this.getLast(user).then(function(response) {
@@ -44,7 +44,7 @@ timeclock.factory('clockApi', ['$http', function($http) {
             });
         },
         delete : function(id) {
-            //
+            return $http.get("/timeclock/api/?action=clockDelete&id=" + id);
         }
     };
 }]);
