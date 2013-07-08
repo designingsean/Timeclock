@@ -11,13 +11,13 @@ var timeclock = angular.module("timeclock", [])
 timeclock.factory('usersApi', ['$http', function($http) {
     return {
         add : function(name) {
-            //
+            return $http.get("/timeclock/api/?action=usersAdd&name=" + name);
         },
         get : function(active) {
             return $http.get("/timeclock/api/?action=usersGet&active=" + active);
         },
         update : function(id) {
-            //
+            return $http.get("/timeclock/api/?action=usersUpdate&id=" + id);
         }
     };
 }]);

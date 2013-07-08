@@ -1,30 +1,28 @@
-function users($scope, $http) {
-	$scope.newUser = '';
+timeclock.controller('users', function users($scope, usersApi) {
+    $scope.newUser = '';
 
-	getUsers();
+    getUsers();
 
-	function getUsers() {
-		//get the list of users
-		$scope.newUser = '';
+    function getUsers() {
+        $scope.newUser = '';
+        usersApi.get(1).then(function(response) {
+            $scope.activeUsers = response.data;
+        });
+        usersApi.get(0).then(function(response) {
+            $scope.inactiveUsers = response.data;
+        });
+    }
 
-		$http.get("/timeclock/api/index-old.php?action=getUsers").success(function(response) {
-			$scope.activeUsers = response;
-		});
-		$http.get("/timeclock/api/index-old.php?action=adminInactiveUsers").success(function(response) {
-			$scope.inactiveUsers = response;
-		});
-	};
+    $scope.addUser = function() {
+        usersApi.add($scope.newUser).then(function () {
+            getUsers();
+        });
+    };
 
-	$scope.addUser = function() {
-		$http.get("/timeclock/api/index-old.php", { params: { action: 'adminAddUser', user: $scope.newUser } }).success(getUsers).error(function() { alert("error"); });
-	}
+    $scope.updateUser = function(user) {
+        usersApi.update(user.id).then(function() {
+            getUsers();
+        });
+    };
 
-	$scope.updateUser = function(action, user) {
-		if(action === 'activate') {
-			$http.get("/timeclock/api/index-old.php", { params: { action: 'adminUpdateUser', active: 1, id: user.id } }).success(getUsers).error(function() { alert("error"); });
-		} else {
-			$http.get("/timeclock/api/index-old.php", { params: { action: 'adminUpdateUser', active: 0, id: user.id } }).success(getUsers).error(function() { alert("error"); });
-		}
-	}
-
-}
+});

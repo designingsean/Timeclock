@@ -4,7 +4,7 @@
     <tbody>
         <tr ng-repeat="user in activeUsers">
             <td width="80%">{{user.name}}</td>
-            <td width="20%"><a href="#" ng-click="updateUser('deactivate', user)">Deactivate</a></td>
+            <td width="20%"><a class="btn btn-link" ng-click="updateUser(user)">Deactivate</a></td>
         </tr>
     </tbody>
 </table>
@@ -13,7 +13,7 @@
     <tbody>
         <tr ng-repeat="user in inactiveUsers">
             <td width="80%">{{user.name}}</td>
-            <td width="20%"><a href="#" ng-click="updateUser('activate', user)">Activate</a></td>
+            <td width="20%"><a class="btn btn-link" ng-click="updateUser(user)">Activate</a></td>
         </tr>
     </tbody>
 </table>
