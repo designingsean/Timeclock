@@ -1,0 +1,23 @@
+<input type="date" ng-model="selectedDate" ng-change="getTimes()" />
+<div>
+    <h2>Pay Period Details</h2>
+    <h3>{{startDate | date:'longDate'}} to {{endDate | date:'longDate'}}</h3>
+    <table class="table table-striped table-hover" width="400">
+        <thead>
+            <tr>
+                <th width="25%">Name</th>
+                <th width="25%">First Week</th>
+                <th width="25%">Second Week</th>
+                <th width="25%">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="currentTime in currentTimes">
+                <td width="25%">{{currentTime.name}}</td>
+                <td width="25%">{{currentTime.times.firstWeekTotal | number:2}}</td>
+                <td width="25%">{{currentTime.times.secondWeekTotal | number:2}}</td>
+                <td width="25%">{{currentTime.times.payperiodTotal | number:2}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
