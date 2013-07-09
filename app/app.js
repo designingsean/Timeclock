@@ -43,7 +43,7 @@ timeclock.factory('clockApi', ['$http', function($http) {
                 return $http.get("/timeclock/api/?action=clockUpdate&id=" + response.data.id + "&end=" + end);
             });
         },
-        delete : function(id) {
+        remove : function(id) {
             return $http.get("/timeclock/api/?action=clockDelete&id=" + id);
         }
     };
