@@ -1,6 +1,6 @@
 var timeclock = angular.module("timeclock", [])
 .config(function($locationProvider, $routeProvider) {
-    $locationProvider.html5Mode(true);
+    //$locationProvider.html5Mode(true);
     $routeProvider
         .when("/", { controller: "clock", templateUrl: "app/views/clock.html" })
         .when("/admin/", { controller: "admin", templateUrl: "app/views/admin.html" })
