@@ -1,98 +1,72 @@
-function admin($scope, $http) {
-	$scope.currentUser = $scope.totalCurrent = $scope.totalPrevious = 0;
-	$scope.clockedIn = false;
-	$scope.clockDate = $scope.clockStart = $scope.clockEnd = '';
+timeclock.controller('admin', function admin($scope, usersApi, clockApi, payperiodFactory, totaltimeFactory) {
+    $scope.currentTimes = {};
+    $scope.currentUser = 0;
+    $scope.selectedDate = moment();
+    $scope.startDate = "";
+    $scope.endDate = "";
+    $scope.startTime = "";
+    $scope.endTime = "";
 
-	//get the list of users
-	$http.get("/timeclock/api/index-old.php?action=getUsers").success(function(response) {
-		$scope.users = response;
-	});
+    //get the list of users
+    usersApi.get(1).then(function(response) {
+        $scope.users = response.data;
+    });
 
-	//get a users current status
-	function currentStatus() {
-		$http.get("/timeclock/api/index-old.php?action=getStatus&user=" + $scope.currentUser).success(function(response) {
-			var currentStatus;
-			var time;
-			if (response === null || (response.clockIn !== null && response.clockOut !== null) ) {
-				currentStatus = "Clocked out ";
-				time = response.clockOut;
-				$scope.clockedIn = false;
-			} else {
-				currentStatus = "Clocked in ";
-				time = response.clockIn;
-				$scope.clockedIn = true;
-			}
-			currentStatus = currentStatus + Date.create(time).relative(function(value, unit, ms, loc) {
-				if (ms.abs() > (14).hour() && ms.abs() < (7).day()) {
-					return "on {Weekday} at {12hr}:{mm}{tt}";
-				} else if (ms.abs() >= (7).day()) {
-					return "on {Weekday}, {Month} {d} at {12hr}:{mm}{tt}";
-				}
-			});
-			$scope.currentStatus = currentStatus
-		});
-	}
+    function getTimes(date) {
+        var obj = {};
+        obj.payperiodTotal = 0;
+        var periodDates = payperiodFactory.periodDates(date);
+        $scope.startDate = periodDates.firstWeekStart;
+        $scope.endDate = periodDates.secondWeekEnd;
+        clockApi.get($scope.currentUser, periodDates.firstWeekStart, periodDates.firstWeekEnd).then(function(response) {
+            obj.firstWeekTotal = totaltimeFactory.getTotal(response.data);
+            obj.firstWeek = response.data;
+            obj.payperiodTotal += obj.firstWeekTotal;
+        });
+        clockApi.get($scope.currentUser, periodDates.secondWeekStart, periodDates.secondWeekEnd).then(function(response) {
+            obj.secondWeekTotal = totaltimeFactory.getTotal(response.data);
+            obj.secondWeek = response.data;
+            obj.payperiodTotal += obj.secondWeekTotal;
+        });
+        return obj;
+    }
 
-	//get the current paycheck's hours
-	function getCurrent() {
-		$http.get("/timeclock/api/index-old.php?action=getCurrent&user=" + $scope.currentUser).success(function(response) {
-			response[0].weekTotal = getTotal(response[0]);
-			response[1].weekTotal = getTotal(response[1]);
-			$scope.currentTimes = response;
-			$scope.totalCurrent = getTotal(response[0]) + getTotal(response[1]);
-		});
-	}
+    //resets back to basics
+    function reset() {
+        $scope.currentTimes = {};
+        $scope.currentUser = 0;
+        $scope.selectedDate = moment();
+        $scope.startDate = "";
+        $scope.endDate = "";
+        $scope.startTime = "";
+        $scope.endTime = "";
+    }
 
-	//get the previous paycheck's hours
-	function getPrevious() {
-		$http.get("/timeclock/api/index-old.php?action=getPrevious&user=" + $scope.currentUser).success(function(response) {
-			response[0].weekTotal = getTotal(response[0]);
-			response[1].weekTotal = getTotal(response[1]);
-			$scope.previousTimes = response;
-			$scope.totalPrevious = getTotal(response[0]) + getTotal(response[1]);
-		});
-	}
+    $scope.getTimes = function() {
+        if($scope.currentUser > 0) {
+            $scope.currentTimes = getTimes($scope.selectedDate);
+        } else {
+            reset();
+        }
+    };
 
-	//gets total time for a paycheck
-	function getTotal(obj) {
-		var total = 0;
-		angular.forEach(obj, function(value, key) {
-			if (value.totalTime !== null)
-				total += (value.totalTime).toNumber();
-		});
-		return total.round(2);
-	}
+    $scope.addRow = function() {
+        var start = moment($scope.selectedDate + " " + $scope.startTime, "YYYY-MM-DD h:mm a").format("YYYY-MM-DD HH:mm:ss");
+        var end = moment($scope.selectedDate + " " + $scope.endTime, "YYYY-MM-DD h:mm a").format("YYYY-MM-DD HH:mm:ss");
+        clockApi.add($scope.currentUser, start, end).then(function() {
+            $scope.currentTimes = getTimes($scope.selectedDate);
+            $scope.startTime = "";
+            $scope.endTime = "";
+        });
+    };
 
-	//resets back to basics
-	function reset() {
-		$scope.currentTimes = {};
-		$scope.previousTimes = {};
-		$scope.clockedIn = false;
-		$scope.currentStatus = "";
-		$scope.currentUser = $scope.totalCurrent = $scope.totalPrevious = 0;
-	}
+    $scope.removeRow = function(id) {
+        clockApi.remove(id).then(function() {
+            $scope.currentTimes = getTimes($scope.selectedDate);
+        });
+    };
 
-	$scope.getTimes = function() {
-		if($scope.currentUser > 0) {
-			currentStatus();
-			getCurrent();
-			getPrevious();
-		} else {
-			reset();
-		}
-	};
-
-	$scope.addEntry = function() {
-		var start = Date.create($scope.clockDate + ' ' + $scope.clockStart).format('{yyyy}-{MM}-{dd} {HH}:{mm}:00');
-		var end = Date.create($scope.clockDate + ' ' + $scope.clockEnd).format('{yyyy}-{MM}-{dd} {HH}:{mm}:00');
-		$http.get("/timeclock/api/index-old.php", { params: { action: 'adminAdd', user: $scope.currentUser, start: start, end: end } }).success($scope.getTimes).error(function() { alert("error"); });
-	}
-
-	$scope.removeEntry = function(cT) {
-		$http.get("/timeclock/api/index-old.php", { params: { action: 'adminDelete', id: cT.id } }).success($scope.getTimes).error(function() { alert("error"); });
-	}
-
-	$scope.reset = function() {
-		reset();
-	}
-}
+    $scope.reset = function() {
+        reset();
+    };
+});
