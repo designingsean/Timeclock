@@ -1,0 +1,57 @@
+<p class="form-inline"><select ng-model="currentUser" ng-change="getTimes()"><option value="0">Who are you?</option><option ng-repeat="user in users" value="{{user.id}}">{{user.name}}</option></select> <button class="close" ng-click="reset()" style="float:none;">&times;</button></p>
+<input type="date" ng-model="selectedDate" ng-change="getTimes()" />
+<p class="form-inline">
+    <input type="text" placeholder="In" class="input-mini" ng-model="startTime" ng-pattern="/^[1]?[0-9]:[0-5][0-9] [ap]m$/" />
+    <input type="text" placeholder="Out" class="input-mini" ng-model="endTime" ng-pattern="/^[1]?[0-9]:[0-5][0-9] [ap]m$/" />
+    <button class="btn" ng-click="addRow()">Add</button>
+</p>
+<div ng-show="currentUser">
+    <h2>Pay Period Details</h2>
+    <h3>{{startDate | date:'longDate'}} to {{endDate | date:'longDate'}}</h3>
+    <p class="lead">{{currentTimes.payperiodTotal | number:2}} total hours</p>
+    <table class="table table-striped" width="400">
+        <thead>
+            <tr>
+                <th width="20%">Date</th>
+                <th width="20%">In</th>
+                <th width="20%">Out</th>
+                <th width="20%">Total</th>
+                <th width="20%"></th>
+            </tr>
+        </thead>
+    </table>
+    <table class="table table-striped" width="400">
+        <thead>
+            <tr>
+                <th colspan="4" width="80%">Week Total</th>
+                <th width="20%">{{currentTimes.secondWeekTotal | number:2}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="currentTime in currentTimes.secondWeek">
+                <td width="20%">{{currentTime.clockInDate}}</td>
+                <td width="20%">{{currentTime.clockInTime}}</td>
+                <td width="20%">{{currentTime.clockOutTime}}</td>
+                <td width="20%">{{currentTime.totalTime | number:2}}</td>
+                <td width="20%"><button class="btn btn-link" ng-click="removeRow(currentTime.id)">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-striped" width="400">
+        <thead>
+            <tr>
+                <th colspan="4" width="80%">Week Total</th>
+                <th width="20%">{{currentTimes.firstWeekTotal | number:2}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="currentTime in currentTimes.firstWeek">
+                <td width="20%">{{currentTime.clockInDate}}</td>
+                <td width="20%">{{currentTime.clockInTime}}</td>
+                <td width="20%">{{currentTime.clockOutTime}}</td>
+                <td width="20%">{{currentTime.totalTime | number:2}}</td>
+                <td width="20%"><button class="btn btn-link" ng-click="removeRow(currentTime.id)">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

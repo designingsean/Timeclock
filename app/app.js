@@ -4,7 +4,7 @@ var timeclock = angular.module("timeclock", [])
     $routeProvider
         .when("/", { controller: "clock", templateUrl: "app/views/clock.html" })
         .when("/admin/", { controller: "admin", templateUrl: "app/views/admin.html" })
-        .when("/admin/report", { controller: "report", templateUrl: "app/views/report.html" })
+        .when("/admin/edit", { controller: "edit", templateUrl: "app/views/edit.html" })
         .when("/admin/users", { controller: "users", templateUrl: "app/views/users.html" })
         .otherwise({ redirectTo: '/timeclock' });
 });
