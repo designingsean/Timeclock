@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="currentTime in currentTimes">
+            <tr ng-repeat="currentTime in currentTimes | orderBy:name">
                 <td width="25%">{{currentTime.name}}</td>
                 <td width="25%">{{currentTime.times.firstWeekTotal | number:2}}</td>
                 <td width="25%">{{currentTime.times.secondWeekTotal | number:2}}</td>
