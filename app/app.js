@@ -1,14 +1,13 @@
 var timeclock = angular.module("timeclock", [])
 .config(function($locationProvider, $routeProvider) {
-    //$locationProvider.html5Mode(true);
     $routeProvider
         .when("/", { controller: "clock", templateUrl: "app/views/clock.html" })
         .when("/admin/", { controller: "admin", templateUrl: "app/views/admin.html" })
         .when("/admin/edit", { controller: "edit", templateUrl: "app/views/edit.html" })
         .when("/admin/users", { controller: "users", templateUrl: "app/views/users.html" })
         .otherwise({ redirectTo: '/timeclock' });
-});
-timeclock.factory('usersApi', ['$http', function($http) {
+})
+.factory('usersApi', ['$http', function($http) {
     return {
         add : function(name) {
             return $http.get("/timeclock/api/?action=usersAdd&name=" + name);
@@ -20,8 +19,8 @@ timeclock.factory('usersApi', ['$http', function($http) {
             return $http.get("/timeclock/api/?action=usersUpdate&id=" + id);
         }
     };
-}]);
-timeclock.factory('clockApi', ['$http', function($http) {
+}])
+.factory('clockApi', ['$http', function($http) {
     return {
         add : function(user, start, end) {
             return $http.get("/timeclock/api/?action=clockAdd&user=" + user + "&start=" + start + "&end=" + end);
@@ -47,8 +46,8 @@ timeclock.factory('clockApi', ['$http', function($http) {
             return $http.get("/timeclock/api/?action=clockDelete&id=" + id);
         }
     };
-}]);
-timeclock.factory('payperiodFactory', function() {
+}])
+.factory('payperiodFactory', function() {
     var dateStart = moment('2013-01-07').isoWeek()%2;
     return {
         periodDates : function(date) {
@@ -65,8 +64,8 @@ timeclock.factory('payperiodFactory', function() {
             return momentObj;
         }
     };
-});
-timeclock.factory('totaltimeFactory', function() {
+})
+.factory('totaltimeFactory', function() {
     return {
         getTotal : function(obj) {
             var total = 0;
