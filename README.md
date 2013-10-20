@@ -14,9 +14,11 @@ Todo
 ----
 1. Exportable file to make it easier to upload to ADP or similar.
 
-2. Easy settings to change pay period start day and length.
+2. Easy settings to change pay period start day.
 
-3. Overtime indicators
+3. Overtime indicators.
+
+4. Comparison against scheduled hours.
 
 License
 -------
