@@ -1,12 +1,11 @@
 Timeclock
 =========
-A simple time clock application for hourly employees built with AngularJS, using PHP/MySQL as a backend.
+A simple time clock application for hourly employees. Built with AngularJS.
 
 Features
 --------
 * Simple clock in/out functionality. Employees select their name from a drop down, and the system displays buttons that allow them to clock in or out, based on what their last action was. It also displays their total hours for each day and week, for both the current pay period as well as the last.
 * Admin functions:
-	* Add new users. Activate/deactivate existing users.
 	* Add/edit/delete punches for individual users.
 	* Generate a simple report for each pay period, that shows total hours for each employee, with weekly breakdowns.
 
@@ -33,34 +32,3 @@ jQuery 1.8.3
 AngularJS 1.0.7
 
 MomentJS 2.0.0
-
-Meekro 2.1
-
-Database Structure
-------------------
-User table:
-
-	CREATE TABLE `users` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	  `name` varchar(20) NOT NULL DEFAULT '',
-	  `active` tinyint(1) NOT NULL,
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-Timeclock table:
-
-	CREATE TABLE `clock` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	  `uid` int(11) NOT NULL,
-	  `clockIn` datetime NOT NULL,
-	  `clockOut` datetime DEFAULT NULL,
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-Misc
-----
-db.config.php file omitted for obvious reasons. Format is below:
-
-	DB::$user = 'DBUSER';
-	DB::$password = 'DBPASS';
-	DB::$dbName = 'DBNAME';
