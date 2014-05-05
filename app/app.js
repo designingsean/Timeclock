@@ -10,40 +10,67 @@ var timeclock = angular.module("timeclock", [])
 .factory('usersApi', ['$http', function($http) {
     return {
         add : function(name) {
-            return $http.get("/timeclock/api/?action=usersAdd&name=" + name);
+            return $http({
+                method: 'POST',
+                url: "http://tlg.dev:3000/users",
+                data: { name: name }
+            });
         },
         get : function(active) {
-            return $http.get("/timeclock/api/?action=usersGet&active=" + active);
+            if (active) {
+                return $http.get("http://tlg.dev:3000/users");
+            } else {
+                return $http.get("http://tlg.dev:3000/users/inactive");
+            }
         },
         update : function(id) {
-            return $http.get("/timeclock/api/?action=usersUpdate&id=" + id);
+            return $http({
+                method: 'PATCH',
+                url: "http://tlg.dev:3000/users/" + id
+            });
         }
     };
 }])
 .factory('clockApi', ['$http', function($http) {
     return {
         add : function(user, start, end) {
-            return $http.get("/timeclock/api/?action=clockAdd&user=" + user + "&start=" + start + "&end=" + end);
+            return $http({
+                method: 'POST',
+                url: "http://tlg.dev:3000/clock",
+                data: { user: user, start: start, end: end }
+            });
         },
         clockIn : function(user) {
-            return $http.get("/timeclock/api/?action=clockAdd&user=" + user);
+            return $http({
+                method: 'POST',
+                url: "http://tlg.dev:3000/clock",
+                data: { user: user }
+            });
         },
         get : function(user, start, end) {
-            return $http.get("/timeclock/api/?action=clockGet&user=" + user + "&start=" + start + "&end=" + end);
+            return $http({
+                method: 'POST',
+                url: "http://tlg.dev:3000/clock/range",
+                data: { user: user, start: start, end: end }
+            });
         },
         getLast : function(user) {
-            return $http.get("/timeclock/api/?action=clockGet&user=" + user);
-        },
-        update : function(id, start, end) {
-            return $http.get("/timeclock/api/?action=clockUpdate&id=" + id + "&start=" + start + "&end=" + end);
+            return $http.get("http://tlg.dev:3000/clock/" + user);
         },
         clockOut : function(user, end) {
             return this.getLast(user).then(function(response) {
-                return $http.get("/timeclock/api/?action=clockUpdate&id=" + response.data.id + "&end=" + end);
+                return $http({
+                    method: 'PUT',
+                    url: "http://tlg.dev:3000/clock/" + response.data.id,
+                    data: { end: end }
+                });
             });
         },
         remove : function(id) {
-            return $http.get("/timeclock/api/?action=clockDelete&id=" + id);
+            return $http({
+                method: 'DELETE',
+                url: "http://tlg.dev:3000/clock/" + id
+            });
         }
     };
 }])
