@@ -16,12 +16,11 @@ var timeclock = angular.module("timeclock", [])
                 data: { name: name }
             });
         },
-        get : function(active) {
-            if (active) {
-                return $http.get("http://tlg.dev:3000/users");
-            } else {
-                return $http.get("http://tlg.dev:3000/users/inactive");
-            }
+        getActive : function() {
+            return $http.get("http://tlg.dev:3000/users");
+        },
+        getInactive : function() {
+            return $http.get("http://tlg.dev:3000/users/inactive");
         },
         update : function(id) {
             return $http({

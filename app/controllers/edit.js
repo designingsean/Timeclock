@@ -8,7 +8,7 @@ timeclock.controller('edit', function edit($scope, usersApi, clockApi, payperiod
     $scope.endTime = "";
 
     //get the list of users
-    usersApi.get(1).then(function(response) {
+    usersApi.getActive().then(function(response) {
         $scope.users = response.data;
     });
 

@@ -7,7 +7,7 @@ timeclock.controller('admin', function admin($scope, usersApi, clockApi, payperi
     var periodDates;
 
     //get the list of users
-    usersApi.get(1).then(function(response) {
+    usersApi.getActive().then(function(response) {
         $scope.users = response.data;
     });
 

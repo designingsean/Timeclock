@@ -3,7 +3,7 @@ timeclock.controller('clock', function clock($scope, usersApi, clockApi, payperi
     $scope.clockedIn = false;
 
     //get the list of users
-    usersApi.get(1).then(function(response) {
+    usersApi.getActive().then(function(response) {
         $scope.users = response.data;
     });
 

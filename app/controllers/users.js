@@ -5,10 +5,10 @@ timeclock.controller('users', function users($scope, usersApi) {
 
     function getUsers() {
         $scope.newUser = '';
-        usersApi.get(true).then(function(response) {
+        usersApi.getActive().then(function(response) {
             $scope.activeUsers = response.data;
         });
-        usersApi.get(false).then(function(response) {
+        usersApi.getInactive().then(function(response) {
             $scope.inactiveUsers = response.data;
         });
     }
