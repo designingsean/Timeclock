@@ -17,10 +17,16 @@ var timeclock = angular.module("timeclock", [])
             });
         },
         getActive : function() {
-            return $http.get("http://tlg.dev:3000/users");
+            return $http({
+                method: 'GET',
+                url: "http://tlg.dev:3000/users"
+            });
         },
         getInactive : function() {
-            return $http.get("http://tlg.dev:3000/users/inactive");
+            return $http({
+                method: 'GET',
+                url: "http://tlg.dev:3000/users/inactive"
+            });
         },
         update : function(id) {
             return $http({
@@ -54,7 +60,10 @@ var timeclock = angular.module("timeclock", [])
             });
         },
         getLast : function(user) {
-            return $http.get("http://tlg.dev:3000/clock/" + user);
+            return $http({
+                method: 'GET',
+                url: "http://tlg.dev:3000/clock/" + user
+            });
         },
         clockOut : function(user, end) {
             return this.getLast(user).then(function(response) {
