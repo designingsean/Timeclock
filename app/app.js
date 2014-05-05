@@ -4,34 +4,14 @@ var timeclock = angular.module("timeclock", [])
         .when("/", { controller: "clock", templateUrl: "app/views/clock.html" })
         .when("/admin/", { controller: "admin", templateUrl: "app/views/admin.html" })
         .when("/admin/edit", { controller: "edit", templateUrl: "app/views/edit.html" })
-        .when("/admin/users", { controller: "users", templateUrl: "app/views/users.html" })
         .otherwise({ redirectTo: '/timeclock' });
 })
 .factory('usersApi', ['$http', function($http) {
     return {
-        add : function(name) {
-            return $http({
-                method: 'POST',
-                url: "http://tlg.dev:3000/users",
-                data: { name: name }
-            });
-        },
         getActive : function() {
             return $http({
                 method: 'GET',
                 url: "http://tlg.dev:3000/users"
-            });
-        },
-        getInactive : function() {
-            return $http({
-                method: 'GET',
-                url: "http://tlg.dev:3000/users/inactive"
-            });
-        },
-        update : function(id) {
-            return $http({
-                method: 'PATCH',
-                url: "http://tlg.dev:3000/users/" + id
             });
         }
     };
