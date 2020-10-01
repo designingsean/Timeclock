@@ -32,3 +32,4 @@ jQuery 1.8.3
 AngularJS 1.0.7
 
 MomentJS 2.0.0
+[![Run on Repl.it](https://repl.it/badge/github/designingsean/Timeclock)](https://repl.it/github/designingsean/Timeclock)
